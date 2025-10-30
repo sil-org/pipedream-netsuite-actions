@@ -3,7 +3,7 @@ import { NetsuiteApiClient } from "netsuite-api-client";
 export default {
   name: "NetSuite Get Customer",
   description: "Get a customer record from NetSuite",
-  key: "netsuite-get-customer",
+  key: "netsuite_get_customer",
   version: "0.0.1",
   type: "action",
 
