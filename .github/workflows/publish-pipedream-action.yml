@@ -1,0 +1,24 @@
+name: Publish Pipedream Action
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v4
+
+            - name: Install Pipedream CLI
+              run: curl https://cli.pipedream.com/install | sh
+
+            - name: Configure Pipedream CLI
+              run: |
+                  mkdir -p $HOME/.config/pipedream
+                  echo "api_key = ${{ secrets.PIPEDREAM_API_KEY }}" > $HOME/.config/pipedream/config
+
+            - name: Publish Action to Pipedream
+              run: pd publish get-customer.js
