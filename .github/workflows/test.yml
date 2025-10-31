@@ -12,6 +12,7 @@ jobs:
 
       - name: Print js files changed
         run: |
+          git fetch origin ${{ github.base_ref }}
           changed_files=$(git diff --name-only origin/${{ github.head_ref }}...HEAD | grep '\.js$')
           echo $changed_files
           # for file in $changed_files; do
