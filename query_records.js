@@ -45,8 +45,7 @@ export default defineComponent({
         error.response?.data || error.message
       );
       throw new Error(
-        `Failed to execute SuiteQL query: ${error.response?.data?.detail || error.message
-        }`
+        `Failed to execute SuiteQL query: ${error.response?.data?.detail || error.message}`
       );
     }
   },
