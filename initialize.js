@@ -2,7 +2,7 @@ export default {
   name: "Initialize NetSuite",
   description: "Initialize NetSuite",
   key: "initialize_netsuite",
-  version: "0.0.4",
+  version: "0.0.5",
   type: "action",
 
   props: {
@@ -16,7 +16,7 @@ export default {
       label: "NetSuite Consumer Key",
       secret: true,
     },
-    consumer_secret: {
+    consumer_secret_key: {
       type: "string",
       label: "NetSuite Consumer Secret",
       secret: true,
