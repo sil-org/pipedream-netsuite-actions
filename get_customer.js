@@ -38,7 +38,9 @@ export default {
         error.response?.data || error.message
       );
       throw new Error(
-        `Failed to fetch customer: ${error.response?.data?.detail || error.message}`
+        `Failed to fetch customer: ${
+          error.response?.data?.detail || error.message
+        }`
       );
     }
   },
