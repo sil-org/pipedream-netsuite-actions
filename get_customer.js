@@ -4,7 +4,7 @@ export default {
   name: "NetSuite Get Customer",
   description: "Get a customer record from NetSuite",
   key: "netsuite_get_customer",
-  version: "0.0.4",
+  version: "0.0.5",
   type: "action",
 
   props: {

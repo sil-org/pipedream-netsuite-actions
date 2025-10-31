@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.0.3",
+  version: "0.0.5",
   type: "action",
 
   props: {
@@ -23,28 +23,12 @@ export default defineComponent({
   },
 
   async run({ $ }) {
-    const {
-      consumer_key,
-      consumer_secret,
-      token_id,
-      token_secret,
-      account_id,
-      base_url,
-    } = this.config;
-
-    const client = new NetsuiteApiClient({
-      consumer_key,
-      consumer_secret_key: consumer_secret,
-      token: token_id,
-      token_secret,
-      realm: account_id,
-      base_url,
-    });
+    const client = new NetsuiteApiClient(this.config);
 
     try {
       const response = await client.request({
         method: "POST",
-        path: "/services/rest/query/v1/suiteql",
+        path: "/query/v1/suiteql",
         headers: { "Content-Type": "application/json" },
         data: { q: this.query },
       });
