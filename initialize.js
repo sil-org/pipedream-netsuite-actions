@@ -2,7 +2,7 @@ export default {
   name: "Initialize NetSuite",
   description: "Initialize NetSuite",
   key: "initialize_netsuite",
-  version: "0.0.5",
+  version: "0.0.6",
   type: "action",
 
   props: {
@@ -42,7 +42,7 @@ export default {
     const config = {
       account_id: this.account_id,
       consumer_key: this.consumer_key,
-      consumer_secret: this.consumer_secret_key,
+      consumer_secret_key: this.consumer_secret_key,
       token_id: this.token_id,
       token_secret: this.token_secret,
       base_url: this.base_url,
