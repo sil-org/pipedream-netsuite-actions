@@ -1,0 +1,19 @@
+name: Publish Pipedream Action
+on:
+  pull_request:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Print js files changed
+        run: |
+          changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep '\.js$')
+          echo $changed_files
+          # for file in $changed_files; do
+          #   git publish $file
+          # done
