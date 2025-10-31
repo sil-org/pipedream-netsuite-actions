@@ -1,11 +1,10 @@
 import { NetsuiteApiClient } from "netsuite-api-client";
-import { version } from "./version";
 
 export default {
   name: "NetSuite Get Customer",
   description: "Get a customer record from NetSuite",
   key: "netsuite_get_customer",
-  version: version,
+  version: "0.0.8",
   type: "action",
 
   props: {

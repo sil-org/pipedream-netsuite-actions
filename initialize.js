@@ -1,10 +1,8 @@
-import { version } from "./version";
-
 export default {
   name: "Initialize NetSuite",
   description: "Initialize NetSuite",
   key: "initialize_netsuite",
-  version: version,
+  version: "0.0.8",
   type: "action",
 
   props: {

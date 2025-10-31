@@ -1,11 +1,10 @@
 import { NetsuiteApiClient } from "netsuite-api-client";
-import { version } from "./version";
 
 export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: version,
+  version: "0.0.8",
   type: "action",
 
   props: {
