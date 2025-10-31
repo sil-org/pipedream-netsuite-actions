@@ -1,10 +1,11 @@
 import { NetsuiteApiClient } from "netsuite-api-client";
+import { version } from "./version";
 
 export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.0.7",
+  version: version,
   type: "action",
 
   props: {
@@ -13,6 +14,7 @@ export default defineComponent({
       label: "NetSuite Config",
       description:
         "Configuration object returned from the initialization step.",
+      secret: true,
     },
     query: {
       type: "string",
@@ -44,8 +46,7 @@ export default defineComponent({
         error.response?.data || error.message
       );
       throw new Error(
-        `Failed to execute SuiteQL query: ${
-          error.response?.data?.detail || error.message
+        `Failed to execute SuiteQL query: ${error.response?.data?.detail || error.message
         }`
       );
     }
