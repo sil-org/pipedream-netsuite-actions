@@ -24,7 +24,6 @@ jobs:
       - name: Publish Action to Pipedream
         run: |
           changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '\.js$')
-          echo $changed_files
-          # for file in $changed_files; do
-          #   git publish $file
-          # done
+          for file in $changed_files; do
+            pd publish $file
+          done
