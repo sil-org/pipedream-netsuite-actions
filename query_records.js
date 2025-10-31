@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.0.7",
+  version: "0.0.8",
   type: "action",
 
   props: {
@@ -13,6 +13,7 @@ export default defineComponent({
       label: "NetSuite Config",
       description:
         "Configuration object returned from the initialization step.",
+      secret: true,
     },
     query: {
       type: "string",

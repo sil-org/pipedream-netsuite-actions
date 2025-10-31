@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install Pipedream CLI
         run: curl https://cli.pipedream.com/install | sh
@@ -23,6 +25,7 @@ jobs:
 
       - name: Publish Action to Pipedream
         run: |
-          pd publish get_customer.js
-          pd publish query_records.js
-          pd publish initialize.js
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '\.js$')
+          for file in $changed_files; do
+            pd publish $file
+          done
