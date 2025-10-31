@@ -2,12 +2,12 @@ export default {
   name: "Initialize NetSuite",
   description: "Initialize NetSuite",
   key: "initialize_netsuite",
-  version: "0.0.1",
+  version: "0.0.2",
   type: "action",
 
   props: {
     account_id: {
-      type: "object",
+      type: "string",
       label: "NetSuite Account ID",
       secret: true,
     },
