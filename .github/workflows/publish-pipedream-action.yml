@@ -23,5 +23,5 @@ jobs:
 
       - name: Publish Action to Pipedream
         run: |
-          pd publish get_customer.js
-          pd publish query_records.js
+          pd update get_customer.js
+          pd update query_records.js
