@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.0.8",
+  version: "0.0.10",
   type: "action",
 
   props: {
@@ -13,7 +13,16 @@ export default defineComponent({
       label: "NetSuite Config",
       description:
         "Configuration object returned from the initialization step.",
-      secret: true,
+    },
+    limit: {
+      type: "integer",
+      label: "Limit",
+      description: "The maximum number of records to return.",
+    },
+    offset: {
+      type: "integer",
+      label: "Offset",
+      description: "The number of records to skip.",
     },
     query: {
       type: "string",
@@ -27,18 +36,13 @@ export default defineComponent({
     const client = new NetsuiteApiClient(this.config);
 
     try {
-      const response = await client.request({
-        method: "POST",
-        path: "/query/v1/suiteql",
-        headers: { "Content-Type": "application/json" },
-        data: { q: this.query },
-      });
+      const response = await client.query(this.query, this.limit, this.offset);
 
       $.export(
         "$summary",
-        `Successfully ran SuiteQL query (${response.data.count} rows)`
+        `Successfully ran SuiteQL query with limit ${this.limit} and offset ${this.offset}`
       );
-      return response.data;
+      return response.items;
     } catch (error) {
       console.error(
         "NetSuite API Error:",
