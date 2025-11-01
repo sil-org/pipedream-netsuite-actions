@@ -2,7 +2,7 @@ export default {
   name: "Initialize NetSuite",
   description: "Initialize NetSuite",
   key: "initialize_netsuite",
-  version: "0.0.10",
+  version: "0.0.11",
   type: "action",
 
   props: {
