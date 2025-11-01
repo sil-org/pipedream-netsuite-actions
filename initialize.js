@@ -2,15 +2,10 @@ export default {
   name: "Initialize NetSuite",
   description: "Initialize NetSuite",
   key: "initialize_netsuite",
-  version: "0.0.6",
+  version: "0.0.10",
   type: "action",
 
   props: {
-    account_id: {
-      type: "string",
-      label: "NetSuite Account ID",
-      secret: true,
-    },
     consumer_key: {
       type: "string",
       label: "NetSuite Consumer Key",
@@ -31,21 +26,19 @@ export default {
       label: "NetSuite Token Secret",
       secret: true,
     },
-    base_url: {
+    account_id: {
       type: "string",
-      label: "NetSuite REST API URL",
-      description: "E.g., https://1234567.suitetalk.api.netsuite.com",
+      label: "NetSuite Account ID",
     },
   },
 
   async run({ $ }) {
     const config = {
-      account_id: this.account_id,
       consumer_key: this.consumer_key,
       consumer_secret_key: this.consumer_secret_key,
-      token_id: this.token_id,
+      token: this.token_id,
       token_secret: this.token_secret,
-      base_url: this.base_url,
+      realm: this.account_id,
     };
 
     $.export("$summary", "Successfully initialized NetSuite configuration.");
