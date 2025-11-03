@@ -2,7 +2,7 @@ export default {
   name: "Initialize NetSuite",
   description: "Initialize NetSuite",
   key: "initialize_netsuite",
-  version: "0.0.11",
+  version: "0.0.12",
   type: "action",
 
   props: {
@@ -30,6 +30,11 @@ export default {
       type: "string",
       label: "NetSuite Account ID",
     },
+    base_url: {
+      type: "string",
+      label: "NetSuite Base URL",
+      optional: true,
+    },
   },
 
   async run({ $ }) {
@@ -39,6 +44,7 @@ export default {
       token: this.token_id,
       token_secret: this.token_secret,
       realm: this.account_id,
+      base_url: this.base_url,
     };
 
     $.export("$summary", "Successfully initialized NetSuite configuration.");

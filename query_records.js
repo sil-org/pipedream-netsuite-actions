@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.0.11",
+  version: "0.0.12",
   type: "action",
 
   props: {
@@ -18,6 +18,9 @@ export default defineComponent({
       type: "integer",
       label: "Limit",
       description: "The maximum number of records to return.",
+      min: 0,
+      max: 1000,
+      default: 1000,
     },
     offset: {
       type: "integer",
@@ -33,6 +36,7 @@ export default defineComponent({
   },
 
   async run({ $ }) {
+    delete this.config.base_url
     const client = new NetsuiteApiClient(this.config);
 
     try {
