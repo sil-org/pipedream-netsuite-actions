@@ -40,13 +40,18 @@ export default defineComponent({
     const client = new NetsuiteApiClient(this.config);
 
     try {
-      const response = await client.query(this.query, this.limit, this.offset);
+      const items = []
+      do {
+        const response = await client.query(this.query, this.limit, this.offset);
+        items = items.concat(response.items)
+        this.offset += this.limit
+      } while (response.hasMore)
 
       $.export(
         "$summary",
         `Successfully ran SuiteQL query with limit ${this.limit} and offset ${this.offset}`
       );
-      return response.items;
+      return items;
     } catch (error) {
       console.error(
         "NetSuite API Error:",
