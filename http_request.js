@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite HTTP Request",
   description: "Run a NetSuite HTTP request.",
   key: "netsuite_request",
-  version: "0.0.1",
+  version: "0.0.2",
   type: "action",
 
   props: {
@@ -27,7 +27,8 @@ export default defineComponent({
       const options = {
         method: this.httpRequest.method,
         path: this.httpRequest.url,
-        body: this.body || undefined
+        body: this.httpRequest.body || undefined,
+        heads: this.httpRequest.headers || undefined,
       }
       const response = await client.request(options)
 
