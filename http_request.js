@@ -14,20 +14,9 @@ export default defineComponent({
       description:
         "Configuration object returned from the initialization step.",
     },
-    method: {
-      type: "string",
-      label: "HTTP Method",
-      description: "The HTTP method for the request",
-    },
-    path: {
-      type: "string",
-      label: "URL",
-      description: "The number of records to skip.",
-    },
-    body: {
-      type: "array",
-      label: "Payload",
-      description: "Payload/Body for HTTP request",
+    httpRequest: {
+      type: "http_request",
+      label: "HTTP Request Configuration",
     },
   },
 
@@ -36,8 +25,8 @@ export default defineComponent({
 
     try {
       const options = {
-        method: this.method || "GET",
-        path: this.path,
+        method: this.httpRequest.method,
+        path: this.httpRequest.url,
         body: this.body || undefined
       }
       const response = await client.request(options)
