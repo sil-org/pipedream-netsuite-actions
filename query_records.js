@@ -24,6 +24,7 @@ export default defineComponent({
       type: "integer",
       label: "Timeout in Seconds",
       description: "The timeout in seconds",
+      min: 0,
       optional: true,
     },
     timeout_records: {
