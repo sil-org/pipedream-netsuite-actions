@@ -1,10 +1,10 @@
 import { NetsuiteApiClient } from "netsuite-api-client";
 
 export default defineComponent({
-  name: "NetSuite HTTP Request",
-  description: "Run a NetSuite HTTP request.",
+  name: "NetSuite Request",
+  description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
-  version: "0.0.2",
+  version: "0.0.4",
   type: "action",
 
   props: {
@@ -14,28 +14,50 @@ export default defineComponent({
       description:
         "Configuration object returned from the initialization step.",
     },
-    httpRequest: {
-      type: "http_request",
-      label: "HTTP Request Configuration",
+    method: {
+      type: "string",
+      label: "HTTP Method",
+      description: "GET, POST, PUT, DELETE, etc.",
+      options: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+      default: "GET",
+    },
+    path: {
+      type: "string",
+      label: "Endpoint Path",
+      description: "For example: `/record/v1/customer`",
+    },
+    body: {
+      type: "object",
+      label: "Request Body (optional)",
+      description: "JSON body for POST/PUT requests.",
+      optional: true,
+    },
+    headers: {
+      type: "object",
+      label: "Headers (optional)",
+      description: "Additional headers to include in the request.",
+      optional: true,
     },
   },
 
   async run({ $ }) {
     const client = new NetsuiteApiClient(this.config);
 
-    try {
-      const options = {
-        method: this.httpRequest.method,
-        path: this.httpRequest.url,
-        body: this.httpRequest.body || undefined,
-        heads: this.httpRequest.headers || undefined,
-      }
-      const response = await client.request(options)
+    const options = {
+      method: this.method,
+      path: this.path,
+      body: this.body ? JSON.stringify(this.body) : undefined,
+      headers: this.headers || undefined,
+    };
 
-      $.export(
-        "$summary",
-        `Successfully ran ${options.method} ${options.path}`
-      );
+    if (this.method == "GET") {
+      delete options.body;
+    }
+
+    try {
+      const response = await client.request(options);
+
+      $.export("$summary", `${options.method} ${options.path} succeeded.`);
       return response.data;
     } catch (error) {
       console.error(
@@ -43,7 +65,7 @@ export default defineComponent({
         error.response?.data || error.message
       );
       throw new Error(
-        `Failed to execute Netsuite request: ${
+        `Failed to execute NetSuite request: ${
           error.response?.data?.detail || error.message
         }`
       );
