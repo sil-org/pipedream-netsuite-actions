@@ -14,39 +14,67 @@ export default defineComponent({
       description:
         "Configuration object returned from the initialization step.",
     },
-    limit: {
-      type: "integer",
-      label: "Limit",
-      description: "The maximum number of records to return.",
-      min: 0,
-      max: 1000,
-      default: 1000,
-    },
-    offset: {
-      type: "integer",
-      label: "Offset",
-      description: "The number of records to skip.",
-    },
     query: {
       type: "string",
       label: "SuiteQL Query",
       description:
         "Enter a SuiteQL query, e.g. `SELECT id, entityid, email FROM customer WHERE isinactive = 'F' LIMIT 10`",
     },
+    timeout: {
+      type: "integer",
+      label: "Timeout in Seconds",
+      description: "The timeout in seconds",
+      min: 0,
+      optional: true,
+    },
+    timeout_records: {
+      type: "integer",
+      label: "Limit",
+      description: "The maximum number of records to return before timing out.",
+      min: 0,
+      optional: true,
+    },
   },
+  methods: {
+    handle_timeout(start, count) {
+      const duration = Date.now() - start
+      if (this.timeout && duration >= this.timeout * 1000) {
+        console.error(`Timeout reached at ${duration / 1000} seconds`)
+        return true
+      }
 
+      if (this.timeout_records && count >= this.timeout_records) {
+        console.error(`Timeout reached at ${count} records in ${duration / 1000} seconds`)
+        return true
+      }
+
+      return false
+    }
+  },
   async run({ $ }) {
     delete this.config.base_url
-    const client = new NetsuiteApiClient(this.config);
+    const client = new NetsuiteApiClient(this.config)
+    const limit = Math.min(1000, this.timeout_records)
+    let offset = 0
+    const start = Date.now()
 
     try {
-      const response = await client.query(this.query, this.limit, this.offset);
+      const items = []
+      do {
+        const response = await client.query(this.query, limit, offset)
+        items = items.concat(response.items)
+        offset += limit
+
+        if (await this.handle_timeout(start, items.length)) {
+          break
+        }
+      } while (response.hasMore)
 
       $.export(
         "$summary",
-        `Successfully ran SuiteQL query with limit ${this.limit} and offset ${this.offset}`
+        `Successfully ran SuiteQL query`
       );
-      return response.items;
+      return items;
     } catch (error) {
       console.error(
         "NetSuite API Error:",
