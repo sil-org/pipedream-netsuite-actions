@@ -59,7 +59,7 @@ export default defineComponent({
     const start = Date.now()
 
     try {
-      const items = []
+      let items = []
       do {
         const response = await client.query(this.query, limit, offset)
         items = items.concat(response.items)
