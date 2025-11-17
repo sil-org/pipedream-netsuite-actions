@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.0.13",
+  version: "0.0.14",
   type: "action",
 
   props: {
@@ -31,7 +31,8 @@ export default defineComponent({
       type: "integer",
       label: "Limit",
       description: "The maximum number of records to return before timing out.",
-      min: 0,
+      min: 1,
+      default: 1000,
       optional: true,
     },
   },
@@ -57,11 +58,12 @@ export default defineComponent({
     const limit = Math.min(1000, this.timeout_records)
     let offset = 0
     const start = Date.now()
+    let response = {}
 
     try {
       let items = []
       do {
-        const response = await client.query(this.query, limit, offset)
+        response = await client.query(this.query, limit, offset)
         items = items.concat(response.items)
         offset += limit
 
