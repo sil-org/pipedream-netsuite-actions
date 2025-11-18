@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Request",
   description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
-  version: "0.0.4",
+  version: "0.0.5",
   type: "action",
 
   props: {
@@ -38,8 +38,26 @@ export default defineComponent({
       description: "Additional headers to include in the request.",
       optional: true,
     },
+    get_more: {
+      type: "boolean",
+      label: "Get all records if has more",
+      description: "Get all records if has more",
+      optional: true,
+    },
   },
-
+  methods: {
+    getNextLink(links) {
+      const next = links.find(link => link.rel == "next");
+      const url = new URL(next.href)
+      return this.trimPrefix(url.pathname, "/services/rest") + url.search
+    },
+    trimPrefix(str, prefix) {
+      if (str.startsWith(prefix)) {
+        return str.substring(prefix.length)
+      }
+      return str
+    }
+  },
   async run({ $ }) {
     const client = new NetsuiteApiClient(this.config);
 
@@ -55,9 +73,21 @@ export default defineComponent({
     }
 
     try {
-      const response = await client.request(options);
+      let response = await client.request(options);
 
-      $.export("$summary", `${options.method} ${options.path} succeeded.`);
+      if (this.get_more && response.data.hasMore) {
+        let items = response.data.items
+        do {
+          options.path = await this.getNextLink(response.data.links)
+          response = await client.request(options)
+          items = items.concat(response.data.items)
+        } while (response.data.hasMore)
+
+        // try to keep response similar
+        response.data.items = items
+      }
+
+      $.export("$summary", `${this.method} ${this.path} succeeded.`);
       return response.data;
     } catch (error) {
       console.error(
