@@ -46,12 +46,12 @@ export default defineComponent({
     },
   },
   methods: {
-    get_next_link(links) {
+    getNextLink(links) {
       const next = links.find(link => link.rel == "next");
       const url = new URL(next.href)
-      return this.trim_prefix(url.pathname, "/services/rest") + url.search
+      return this.trimPrefix(url.pathname, "/services/rest") + url.search
     },
-    trim_prefix(str, prefix) {
+    trimPrefix(str, prefix) {
       if (str.startsWith(prefix)) {
         return str.substring(prefix.length)
       }
@@ -78,7 +78,7 @@ export default defineComponent({
       if (this.get_more && response.data.hasMore) {
         let items = response.data.items
         do {
-          options.path = await this.get_next_link(response.data.links)
+          options.path = await this.getNextLink(response.data.links)
           response = await client.request(options)
           items = items.concat(response.data.items)
         } while (response.data.hasMore)
