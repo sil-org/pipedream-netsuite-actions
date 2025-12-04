@@ -4,17 +4,14 @@ export default defineComponent({
   name: "NetSuite Request",
   description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
-  version: "0.0.6",
+  version: "0.0.7",
   type: "action",
 
   props: {
     config: {
       type: "object",
       label: "NetSuite Config",
-      description: "Configuration object returned from the initialization step. Optional if environment variables " +
-        "are defined: NETSUITE_CONSUMER_KEY, NETSUITE_CONSUMER_SECRET, NETSUITE_TOKEN_ID, NETSUITE_TOKEN_SECRET, " +
-        "NETSUITE_ACCOUNT.",
-      optional: true,
+      description: "Configuration object returned from the initialization step.",
     },
     method: {
       type: "string",
@@ -61,15 +58,7 @@ export default defineComponent({
     }
   },
   async run({ $ }) {
-    const envConfig = {
-      consumer_key: process.env.NETSUITE_CONSUMER_KEY,
-      consumer_secret_key: process.env.NETSUITE_CONSUMER_SECRET,
-      token: process.env.NETSUITE_TOKEN_ID,
-      token_secret: process.env.NETSUITE_TOKEN_SECRET,
-      realm: process.env.NETSUITE_ACCOUNT,
-    }
-    const config = { ...envConfig, ...this.config }
-    const client = new NetsuiteApiClient(config);
+    const client = new NetsuiteApiClient(this.config);
 
     const options = {
       method: this.method,
