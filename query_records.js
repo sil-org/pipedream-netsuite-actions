@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.0.15",
+  version: "0.0.16",
   type: "action",
 
   props: {
@@ -55,7 +55,6 @@ export default defineComponent({
     }
   },
   async run({ $ }) {
-    delete this.config.base_url
     const envConfig = {
       consumer_key: process.env.NETSUITE_CONSUMER_KEY,
       consumer_secret_key: process.env.NETSUITE_CONSUMER_SECRET,
