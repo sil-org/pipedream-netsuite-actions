@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Request",
   description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
-  version: "0.0.5",
+  version: "0.0.6",
   type: "action",
 
   props: {
