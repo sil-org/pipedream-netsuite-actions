@@ -58,12 +58,11 @@ export default defineComponent({
     }
   },
   async run({ $ }) {
-    let config = this.config
-    try {
-      config = JSON.parse(this.config)
-    } catch {}
+    if (typeof this.config == "string") {
+      this.config = JSON.parse(this.config)
+    }
 
-    const client = new NetsuiteApiClient(config);
+    const client = new NetsuiteApiClient(this.config);
 
     const options = {
       method: this.method,
