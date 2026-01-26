@@ -52,7 +52,7 @@ export default defineComponent({
     }
   },
   async run({ $ }) {
-    const client = new NetsuiteApiClient(this.config);
+    const client = new NetsuiteApiClient(JSON.parse(this.config));
     const limit = Math.min(1000, this.timeout_records)
     let offset = 0
     const start = Date.now()
