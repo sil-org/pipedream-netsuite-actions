@@ -12,6 +12,7 @@ export default defineComponent({
       type: "object",
       label: "NetSuite Config",
       description: "Configuration object returned from the initialization step.",
+      secret: true,
     },
     query: {
       type: "string",
