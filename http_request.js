@@ -4,12 +4,12 @@ export default defineComponent({
   name: "NetSuite Request",
   description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
-  version: "0.0.9",
+  version: "0.0.10",
   type: "action",
 
   props: {
     config: {
-      type: "object",
+      type: "string",
       label: "NetSuite Config",
       description: "Configuration object returned from the initialization step.",
       secret: true,
@@ -59,11 +59,7 @@ export default defineComponent({
     }
   },
   async run({ $ }) {
-    if (typeof this.config == "string") {
-      this.config = JSON.parse(this.config)
-    }
-
-    const client = new NetsuiteApiClient(this.config);
+    const client = new NetsuiteApiClient(JSON.parse(this.config));
 
     const options = {
       method: this.method,

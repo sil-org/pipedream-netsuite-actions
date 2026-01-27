@@ -4,12 +4,12 @@ export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.0.19",
+  version: "0.0.20",
   type: "action",
 
   props: {
     config: {
-      type: "object",
+      type: "string",
       label: "NetSuite Config",
       description: "Configuration object returned from the initialization step.",
       secret: true,
@@ -53,11 +53,7 @@ export default defineComponent({
     }
   },
   async run({ $ }) {
-    if (typeof this.config == "string") {
-      this.config = JSON.parse(this.config)
-    }
-
-    const client = new NetsuiteApiClient(this.config);
+    const client = new NetsuiteApiClient(JSON.parse(this.config));
     const limit = Math.min(1000, this.timeout_records)
     let offset = 0
     const start = Date.now()
