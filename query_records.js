@@ -11,7 +11,7 @@ export default defineComponent({
     config: {
       type: "string",
       label: "NetSuite Config",
-      description: "Configuration object returned from the initialization step.",
+      description: `NetSuite Configuration JSON object. In format, {"consumer_key":"...","consumer_secret_key":"...","token":"...","token_secret":"...","realm":"..."}`,
       secret: true,
     },
     query: {
