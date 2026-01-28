@@ -15,7 +15,18 @@ export const methods = {
     }
 
     return false
-  }
+  },
+
+  /**
+   * Convert the given date string to a Date-Only ISO-8601 date string (YYYY-MM-DD).
+   * @param {string} dateString
+   * @return {string}
+   */
+  toDateOnlyISO8601(dateString) {
+    const date = new Date(dateString)
+    const isoString = date.toISOString()
+    return isoString.substring(0, 10)
+  },
 }
 
 const queryRecords = {
@@ -95,19 +106,6 @@ const queryRecords = {
     }
   },
 };
-
-export const methods = {
-  /**
-   * Convert the given date string to a Date-Only ISO-8601 date string (YYYY-MM-DD).
-   * @param {string} dateString
-   * @return {string}
-   */
-  toDateOnlyISO8601(dateString) {
-    const date = new Date(dateString)
-    const isoString = date.toISOString()
-    return isoString.substring(0, 10)
-  }
-}
 
 export default defineComponent({
   name: "Exchange Rate Lookup (NetSuite)",
