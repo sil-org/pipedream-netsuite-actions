@@ -65,6 +65,7 @@ const queryRecords = {
       optional: true,
     },
   },
+
   async run({ $ }) {
     if (typeof this.config == "string") {
       this.config = JSON.parse(this.config)
@@ -83,7 +84,7 @@ const queryRecords = {
         items = items.concat(response.items)
         offset += limit
 
-        if (await methods.handle_timeout(start, items.length, this.timeout, this.timeout_records)) {
+        if (methods.handle_timeout(start, items.length, this.timeout, this.timeout_records)) {
           break
         }
       } while (response.hasMore)
