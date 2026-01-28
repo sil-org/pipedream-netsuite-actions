@@ -18,7 +18,7 @@ export const methods = {
   }
 }
 
-export default {
+const queryRecords = {
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
@@ -95,7 +95,6 @@ export default {
     }
   },
 };
-
 
 export const methods = {
   /**
