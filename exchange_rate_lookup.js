@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { NetsuiteApiClient } from 'netsuite-api-client'
 
 export const methods = {
-  handle_timeout(start, count, timeout, timeoutRecords) {
+  handleTimeout(start, count, timeout, timeoutRecords) {
     const duration = Date.now() - start
     if (timeout && duration >= timeout * 1000) {
       console.error(`Timeout reached at ${duration / 1000} seconds`)
@@ -84,7 +84,7 @@ const queryRecords = {
         items = items.concat(response.items)
         offset += limit
 
-        if (methods.handle_timeout(start, items.length, this.timeout, this.timeout_records)) {
+        if (methods.handleTimeout(start, items.length, this.timeout, this.timeout_records)) {
           break
         }
       } while (response.hasMore)
