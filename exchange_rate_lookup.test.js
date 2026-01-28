@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-const { default: component } = await import('../../../PNG-COVER/work-in-progress-png-cover-exchange-rate-lookup-p_QPCMbA6/exchange_rate_lookup/entry.mjs')
+const { default: component } = await import('./exchange_rate_lookup.js')
 
 describe('Exchange Rate Lookup', () => {
   it('should get the expected value for a specific transaction', async (testContext) => {
