@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { NetsuiteApiClient } from 'netsuite-api-client'
+import { NetsuiteApiClient } from 'netsuite-api-client@^1.0.3'
 
 export const methods = {
   handleTimeout(start, count, timeout, timeoutRecords) {
