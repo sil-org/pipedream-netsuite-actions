@@ -1,7 +1,5 @@
 import assert from 'node:assert/strict'
-import queryRecords from './query_records.mjs'
-
-import { NetsuiteApiClient } from "netsuite-api-client";
+import { NetsuiteApiClient } from 'netsuite-api-client'
 
 export const methods = {
   handle_timeout(start, count, timeout, timeoutRecords) {
