@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Request",
   description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
-  version: "0.0.10",
+  version: "0.0.11",
   type: "action",
 
   props: {
@@ -44,6 +44,13 @@ export default defineComponent({
       description: "Get all records if has more",
       optional: true,
     },
+    skip: {
+      type: "boolean",
+      label: "Skip",
+      description: "Set Skip to TRUE or an expression that evaluates to true to skip this step.",
+      default: false,
+      optional: true,
+    }
   },
   methods: {
     getNextLink(links) {
@@ -59,6 +66,11 @@ export default defineComponent({
     }
   },
   async run({ $ }) {
+    if (this.skip) {
+      $.export("$summary", `Skipped`)
+      return {}
+    }
+
     const client = new NetsuiteApiClient(JSON.parse(this.config));
 
     const options = {
