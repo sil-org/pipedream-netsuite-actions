@@ -8,11 +8,29 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+        # Test against all LTS versions of Node (Active, Maintenance).
+        # See <https://nodejs.org/en/about/releases/>
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Clean-install NPM dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm test
 
       - name: Install Pipedream CLI
         run: curl https://cli.pipedream.com/install | sh
@@ -23,9 +41,9 @@ jobs:
           echo "api_key = ${{ secrets.PIPEDREAM_API_KEY }}" > $HOME/.config/pipedream/config
           echo "org_id = ${{ secrets.PIPEDREAM_WORKSPACE_ID }}" >> $HOME/.config/pipedream/config
 
-      - name: Publish Action to Pipedream
+      - name: Publish Actions to Pipedream
         run: |
-          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '\.js$')
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '\.js$' | grep -v '\.test\.js$')
           for file in $changed_files; do
             pd publish $file
           done
