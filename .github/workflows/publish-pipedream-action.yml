@@ -30,6 +30,8 @@ jobs:
         run: npm ci
 
       - name: Test
+        env:
+          NETSUITE_CONFIG_DEV: ${{ secrets.NETSUITE_CONFIG_DEV }}
         run: npm test
 
       - name: Install Pipedream CLI
