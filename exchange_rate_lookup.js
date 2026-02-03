@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { format } from 'node:util'
 import { NetsuiteApiClient } from 'netsuite-api-client@^1.0.3'
 
 export const methods = {
@@ -180,7 +181,16 @@ export default {
       }
     } catch (error) {
       return {
-        Error: error.message,
+        Error: format(
+          'ERROR: Exchange Rate search was not successful.\n'
+          + 'FileName: %s | Transaction Date: %s | Currency ID: %s | Transaction ID: %s\n'
+          + 'NetSuite Error Message: %s',
+          this.file_name,
+          this.transaction_date,
+          this.foreign_currency_id,
+          this.transaction_id,
+          error.message
+        ),
       }
     }
   },
