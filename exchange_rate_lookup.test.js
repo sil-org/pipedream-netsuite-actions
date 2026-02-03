@@ -20,7 +20,7 @@ describe('Exchange Rate Lookup', () => {
       }
     })
 
-    assert.equal(response?.CurrencyRate, 0.738618)
     assert.equal(response?.Error, undefined)
+    assert.equal(response?.CurrencyRate, 0.738618)
   })
 })
