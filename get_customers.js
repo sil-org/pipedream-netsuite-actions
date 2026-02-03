@@ -30,8 +30,8 @@ export default {
     try {
       const client = new NetsuiteApiClient(JSON.parse(this.config));
 
-      this.fields = this.fields || ["*"]
-      const q = `SELECT ${this.fields.join(",")} FROM customer WHERE externalid IN ('${this.externalids.join("','")}')`
+      const fields = this.fields || ["*"]
+      const q = `SELECT ${fields.join(",")} FROM customer WHERE externalid IN ('${this.externalids.join("','")}')`
 
       let limit = 1000
       let offset = 0
