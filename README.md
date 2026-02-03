@@ -7,12 +7,22 @@ A collection of custom Pipedream actions for working with the NetSuite API.
 1. Initialize Netsuite - Initializes Netsuite config for future calls, returns a config object which is used as a parameter for HTTP Request and Query Records
 2. HTTP Request - Calls the specified endpoint, with the specified method and body
 3. Query Records - Runs a SuiteQL query against NetSuite records
+4. Exchange Rate Lookup - Calls NetSuite for what a specific currency's exchange rate was on a specific date
 
 ## Tests
 
 ### Automated Testing
 
 Tests are automatically run on GitHub Actions during the CI/CD process.
+
+**NOTE:** If a `NETSUITE_CONFIG_DEV` environment variable is provided, then integration
+tests that actually call NetSuite will also be run. If not, they will be skipped. That
+env. var. should be a JSON string structured like this:
+```json
+{"consumer_key":"...","consumer_secret_key":"...","token":"...","token_secret":"...","realm":"..."}
+```
+Depending how you set that environment variable, you might need to escape the quotes, so
+`"{\"consumer_key\":\"...\",` and so on.
 
 ### Manual Testing
 
