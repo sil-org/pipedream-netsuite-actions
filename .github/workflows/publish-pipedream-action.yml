@@ -3,7 +3,8 @@ on:
   push:
 
 jobs:
-  publish:
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
     strategy:
@@ -32,19 +33,37 @@ jobs:
           NETSUITE_CONFIG_DEV: ${{ secrets.NETSUITE_CONFIG_DEV }}
         run: npm test
 
+  publish:
+    name: Publish
+    needs: test
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set Node.js version
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Clean-install NPM dependencies
+        run: npm ci
+
       - name: Install Pipedream CLI
-        if: github.ref_name == 'main'
         run: curl https://cli.pipedream.com/install | sh
 
       - name: Configure Pipedream CLI
-        if: github.ref_name == 'main'
         run: |
           mkdir -p $HOME/.config/pipedream
           echo "api_key = ${{ secrets.PIPEDREAM_API_KEY }}" > $HOME/.config/pipedream/config
           echo "org_id = ${{ secrets.PIPEDREAM_WORKSPACE_ID }}" >> $HOME/.config/pipedream/config
 
       - name: Publish Actions to Pipedream
-        if: github.ref_name == 'main'
         run: |
           changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '\.js$' | grep -v '\.test\.js$')
           for file in $changed_files; do
