@@ -112,7 +112,7 @@ export default {
   name: "Exchange Rate Lookup (NetSuite)",
   description: "Retrieve a specific currency exchange rate from NetSuite",
   key: "exchange_rate_lookup",
-  version: "0.1.0",
+  version: "0.1.1",
   type: "action",
 
   props: {
