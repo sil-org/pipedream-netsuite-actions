@@ -9,6 +9,3 @@
 node_modules/
 vendor/
 .terraform/
-
-# dependency lock files (since this is a library)
-package-lock.json
