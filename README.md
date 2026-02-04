@@ -7,7 +7,8 @@ A collection of custom Pipedream actions for working with the NetSuite API.
 1. Initialize Netsuite - Initializes Netsuite config for future calls, returns a config object which is used as a parameter for HTTP Request and Query Records
 2. HTTP Request - Calls the specified endpoint, with the specified method and body
 3. Query Records - Runs a SuiteQL query against NetSuite records
-4. Exchange Rate Lookup - Calls NetSuite for what a specific currency's exchange rate was on a specific date
+4. Get Customers - Get all Netsuite customers from a list of externalids
+5. Exchange Rate Lookup - Calls NetSuite for what a specific currency's exchange rate was on a specific date
 
 ## Tests
 
