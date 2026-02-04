@@ -28,10 +28,10 @@ jobs:
       - name: Clean-install NPM dependencies
         run: npm ci
 
-      - name: Run the "only" tests (see README)
+      - name: Test
         env:
           NETSUITE_CONFIG_DEV: ${{ secrets.NETSUITE_CONFIG_DEV }}
-        run: npm run test:only
+        run: npm test
 
   publish:
     name: Publish
