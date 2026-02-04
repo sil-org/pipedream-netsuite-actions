@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { format } from 'node:util'
 import { NetsuiteApiClient } from 'netsuite-api-client@^1.0.3'
 
 export const methods = {
@@ -112,7 +113,7 @@ export default {
   name: "Exchange Rate Lookup (NetSuite)",
   description: "Retrieve a specific currency exchange rate from NetSuite",
   key: "exchange_rate_lookup",
-  version: "0.1.1",
+  version: "0.2.0",
   type: "action",
 
   props: {
@@ -132,6 +133,18 @@ export default {
       type: "integer",
       label: "Foreign Currency ID",
       description: "Our internal ID for the foreign currency",
+      optional: false,
+    },
+    file_name: {
+      type: "string",
+      label: "File Name",
+      description: "The name of the file being processed (e.g. a CSV file)",
+      optional: false,
+    },
+    transaction_id: {
+      type: "string",
+      label: "Transaction ID",
+      description: "The ID of the transaction being processed",
       optional: false,
     },
   },
@@ -168,7 +181,16 @@ export default {
       }
     } catch (error) {
       return {
-        Error: error.message,
+        Error: format(
+          'ERROR: Exchange Rate search was not successful.\n'
+          + 'FileName: %s | Transaction Date: %s | Currency ID: %s | Transaction ID: %s\n'
+          + 'NetSuite Error Message: %s',
+          this.file_name,
+          this.transaction_date,
+          this.foreign_currency_id,
+          this.transaction_id,
+          error.message
+        ),
       }
     }
   },
