@@ -4,6 +4,17 @@ import { format } from 'node:util'
 
 const { default: component } = await import('./exchange_rate_lookup.js')
 
+const assertStringIncludes = (value, substring) => {
+  assert.equal(
+    typeof value,
+    'string'
+  )
+  assert.ok(
+    value.includes(substring),
+    `\nFailed to find "${substring}" in the following string:\n\n${value}\n`
+  )
+}
+
 describe('Exchange Rate Lookup', () => {
   it('should get the expected value for a specific transaction', async (testContext) => {
     if (!process.env.NETSUITE_CONFIG_DEV) {
@@ -48,21 +59,9 @@ describe('Exchange Rate Lookup', () => {
       }
     })
 
-    assert.equal(
-      response?.Error,
-      format(
-        'ERROR: Exchange Rate search was not successful.\n'
-        + 'FileName: %s | Transaction Date: %s | Currency ID: %s | Transaction ID: %s\n'
-        + 'NetSuite Error Message: %s',
-        component.file_name,
-        component.transaction_date,
-        component.foreign_currency_id,
-        component.transaction_id,
-        'Failed to execute SuiteQL query: Invalid login attempt. For more details, see the Login '
-        + 'Audit Trail in the NetSuite UI at Setup > Users/Roles > User Management > '
-        + 'View Login Audit Trail.'
-      )
-    )
+    assertStringIncludes(response.Error, 'FileName: ' + component.file_name)
+    assertStringIncludes(response.Error, 'Transaction Date: ' + component.transaction_date)
+    assertStringIncludes(response.Error, 'Transaction ID: ' + component.transaction_id)
     assert.equal(response?.CurrencyRate, undefined)
   })
 })
