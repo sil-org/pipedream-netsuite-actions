@@ -4,7 +4,7 @@ export default {
   name: "Get Netsuite Customers",
   description: "This action gets all netsuite customers from a list of externalids.",
   key: "netsuite_get_customers",
-  version: "0.0.1",
+  version: "0.0.26",
   type: "action",
 
   props: {
@@ -32,7 +32,8 @@ export default {
 
       const fields = this.fields || ["*"]
       const q = `SELECT ${fields.join(",")} FROM customer WHERE externalid IN ('${this.externalids.join("','")}')`
-
+      console.log(q)
+      
       let limit = 1000
       let offset = 0
       let response = {}
@@ -43,7 +44,15 @@ export default {
         offset += limit
       } while (response.hasMore)
 
-      return items;
+      $.export("customers", items)
+
+      if (items.length != this.externalids.length) {
+        const notFound = this.externalids.filter((id) => {
+          return !items.some((item) => item.externalid == id)
+        })
+        $.export("error", `The following externalids were not found: ${notFound.join(",")}`)
+        $.export("notFoundExternalIds", notFound)
+      }
     } catch (error) {
       console.error("NetSuite API Error:", error.response?.data || error.message);
       throw new Error(
