@@ -1,32 +1,15 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
-import { format } from 'node:util'
 
-const { default: component } = await import('./exchange_rate_lookup.js')
+const { default: component } = await import('./fill_in_exchange_rates.js')
 
-const assertStringIncludes = (value, substring) => {
-  assert.equal(
-    typeof value,
-    'string'
-  )
-  assert.ok(
-    value.includes(substring),
-    `\nFailed to find "${substring}" in the following string:\n\n${value}\n`
-  )
-}
-
-describe('Exchange Rate Lookup', () => {
-  it('should get the expected value for a specific transaction', async (testContext) => {
-    if (!process.env.NETSUITE_CONFIG_DEV) {
-      testContext.skip('No NETSUITE_CONFIG_DEV env. var. found, so skipping integration test.')
-      return
-    }
-    component.netsuite_config_json = process.env.NETSUITE_CONFIG_DEV
-    component.transaction_date = '2023-04-24'
-    component.foreign_currency_id = 25
-    component.file_name = 'EXAMPLE.csv'
-    component.transaction_id = '123'
-
+describe(component.name, () => {
+  it('should fill in the exchange rate for records without one', async () => {
+    component.input_records = [
+      { Currency: 'PGK', TransactionDate: '2025-11-05', ExchangeRate: 0.23352482368875811498 },
+      { Currency: 'PGK', TransactionDate: '2025-11-05' },
+      { Currency: 'USD', TransactionDate: '2025-11-05', ExchangeRate: 1.00000000000000000000 },
+    ]
     const response = await component.run({
       steps: { trigger: {} },
       $: {
@@ -34,34 +17,12 @@ describe('Exchange Rate Lookup', () => {
       }
     })
 
-    assert.equal(response?.Error, undefined)
-    assert.equal(response?.CurrencyRate, 0.738618)
-  })
-
-  it('should handle errors gracefully', async (testContext) => {
-    if (!process.env.NETSUITE_CONFIG_DEV) {
-      testContext.skip('No NETSUITE_CONFIG_DEV env. var. found, so skipping integration test.')
-      return
+    assert.equal(response.length, component.input_records.length)
+    for (const responseRecord of response) {
+      assert.ok(
+        responseRecord.ExchangeRate > 0,
+        'A record lacks a valid exchange rate: ' + JSON.stringify(responseRecord)
+      )
     }
-
-    // Change the credentials slightly to cause an error response:
-    let netSuiteConfig = JSON.parse(process.env.NETSUITE_CONFIG_DEV)
-    netSuiteConfig.token_secret = netSuiteConfig.token_secret + 'X'
-    component.netsuite_config_json = JSON.stringify(netSuiteConfig)
-
-    component.transaction_date = '2023-04-24'
-    component.foreign_currency_id = 25
-
-    const response = await component.run({
-      steps: { trigger: {} },
-      $: {
-        export: console.log
-      }
-    })
-
-    assertStringIncludes(response.Error, 'FileName: ' + component.file_name)
-    assertStringIncludes(response.Error, 'Transaction Date: ' + component.transaction_date)
-    assertStringIncludes(response.Error, 'Transaction ID: ' + component.transaction_id)
-    assert.equal(response?.CurrencyRate, undefined)
   })
 })
