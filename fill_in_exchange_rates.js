@@ -1,5 +1,6 @@
-import assert from 'node:assert/strict'
-import { format } from 'node:util'
+const getExchangeRateFor = (record) => {
+  return 0
+}
 
 export default {
   name: "Fill In Exchange Rates",
@@ -19,7 +20,7 @@ export default {
   async run({ steps, $ }) {
     for (const record of this.input_records) {
       if (!record.ExchangeRate) {
-        console.debug('Lacks exchange rate:', record)
+        record.ExchangeRate = getExchangeRateFor(record)
       }
     }
     return this.input_records
