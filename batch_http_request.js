@@ -53,7 +53,7 @@ export default defineComponent({
   methods: {
     async request(body) {
       try {
-        await Promise.race([
+        await Promise.any([
           this.client.request({
             method: this.httpRequest.method,
             path: this.httpRequest.url,
