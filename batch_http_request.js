@@ -39,9 +39,10 @@ export default defineComponent({
       default: 30000,
       optional: true,
     },
-    defaultDelay: {
+    batchInterval: {
       type: "integer",
-      label: "Default Delay",
+      label: "Batch Interval",
+      description: "The request loop will send each subsequent block of requests after no less than this amount of time since the previous block began. Set this according to rate limiting rules in effect for the host.",
       optional: true,
       default: 4000
     },
@@ -76,7 +77,7 @@ export default defineComponent({
           const now = Date.now();
           await Promise.allSettled(queue);
           const elapsed = Date.now() - now;
-          await this.delay(this.defaultDelay - elapsed);
+          await this.delay(this.batchInterval - elapsed);
         }
       }
 
