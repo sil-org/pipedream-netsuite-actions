@@ -45,15 +45,11 @@ export default defineComponent({
       optional: true,
       default: 4000
     },
-    client: {
-      type: "object",
-      hidden: true,
-    }
   },
   methods: {
-    async request(body) {
+    async request(client, body) {
       await Promise.any([
-        this.client.request({
+        client.request({
           method: this.httpRequest.method,
           path: this.httpRequest.url,
           body: body,
@@ -69,12 +65,12 @@ export default defineComponent({
     },
   },
   async run({ $ }) {
-    this.client = new NetsuiteApiClient(JSON.parse(this.config));
+    const client = new NetsuiteApiClient(JSON.parse(this.config));
 
     try {
       const queue = [];
       for (let i = 0; i < this.bodies.length; i++) {
-        queue.push(this.request(this.bodies[i]));
+        queue.push(this.request(client, this.bodies[i]));
 
         if (i > 0 && i % this.batchSize == 0) {
           const now = Date.now();
