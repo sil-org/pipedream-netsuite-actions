@@ -52,19 +52,15 @@ export default defineComponent({
   },
   methods: {
     async request(body) {
-      try {
-        await Promise.any([
-          this.client.request({
-            method: this.httpRequest.method,
-            path: this.httpRequest.url,
-            body: body,
-            headers: this.httpRequest.headers
-          }),
-          this.timeout(this.requestTimeout)
-        ]);
-        this.result.processedCount++
-      } catch (error) {
-      }
+      await Promise.any([
+        this.client.request({
+          method: this.httpRequest.method,
+          path: this.httpRequest.url,
+          body: body,
+          headers: this.httpRequest.headers
+        }),
+        this.timeout(this.requestTimeout)
+      ]);
     },
     timeout(ms) {
       return new Promise((_, reject) =>
