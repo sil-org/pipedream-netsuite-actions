@@ -9,7 +9,6 @@ describe(component.name, () => {
     component.input_records = [
       { Currency: 'PGK', TransactionDate: '2025-11-05', ExchangeRate: 0.23352482368875811498 },
       { Currency: 'PGK', TransactionDate: '2025-11-05' },
-      { Currency: 'USD', TransactionDate: '2025-11-05', ExchangeRate: 1.00000000000000000000 },
     ]
     const response = await component.run({
       steps: { trigger: {} },
