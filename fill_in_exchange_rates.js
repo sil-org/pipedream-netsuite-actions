@@ -1,5 +1,21 @@
+let cache = {}
+
 const getExchangeRateFor = (record) => {
-  return 0
+  const cachedValue = getFromCache(record.Currency, record.TransactionDate)
+  if (cachedValue) {
+    return cachedValue
+  }
+  throw new Error('NetSuite call not yet implemented')
+}
+
+const getFromCache = (currency, transactionDate) => {
+  const key = currency + '-' + transactionDate
+  return cache[key]
+}
+
+const setInCache = (currency, transactionDate, exchangeRate) => {
+  const key = currency + '-' + transactionDate
+  cache[key] = exchangeRate
 }
 
 export default {
@@ -17,9 +33,17 @@ export default {
     },
   },
 
+  methods: {
+    emptyCache() {
+      cache = {}
+    },
+  },
+
   async run({ steps, $ }) {
     for (const record of this.input_records) {
-      if (!record.ExchangeRate) {
+      if (record.ExchangeRate) {
+        setInCache(record.Currency, record.TransactionDate, record.ExchangeRate)
+      } else {
         record.ExchangeRate = getExchangeRateFor(record)
       }
     }
