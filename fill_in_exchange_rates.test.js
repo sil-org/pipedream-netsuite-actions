@@ -60,7 +60,12 @@ describe(component.name, () => {
     }
   })
 
-  it('should fill in the exchange rate for records without one', async () => {
+  it('should fill in the exchange rate for records without one', async (testContext) => {
+    // if (!process.env.NETSUITE_CONFIG_DEV) {
+    //   testContext.skip('No NETSUITE_CONFIG_DEV env. var. found, so skipping integration test.')
+    //   return
+    // }
+    component.netsuite_config_json = process.env.NETSUITE_CONFIG_DEV
     component.methods.emptyCache()
     component.currency_data_store = fakeCurrencyDataStore
     component.input_records = [
