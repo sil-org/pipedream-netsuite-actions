@@ -1,4 +1,5 @@
 let cache = {}
+let currencyDataStore = undefined
 
 const cacheAllKnownExchangeRates = (records) => {
   for (const record of records) {
@@ -8,17 +9,25 @@ const cacheAllKnownExchangeRates = (records) => {
   }
 }
 
-const getExchangeRateFor = (record) => {
+const getExchangeRateFor = async (record) => {
   const cachedValue = getFromCache(record.Currency, record.TransactionDate)
   if (cachedValue) {
     return cachedValue
   }
   throw new Error('NetSuite call not yet implemented')
+  const foreignCurrencyId = await lookUpCurrencyId(record.Currency)
 }
 
 const getFromCache = (currency, transactionDate) => {
   const key = currency + '-' + transactionDate
   return cache[key]
+}
+
+const lookUpCurrencyId = async (currency) => {
+  assert.ok(currency, 'No Currency provided to lookUpCurrencyId()')
+  const currencyData = await currencyDataStore.get(currency)
+  assert.ok(currencyData.ID, 'No Currency ID found in Currency Data Store for ' + currency)
+  return currencyData.ID
 }
 
 const setInCache = (currency, transactionDate, exchangeRate) => {
@@ -34,6 +43,10 @@ export default {
   type: "action",
 
   props: {
+    currency_data_store: {
+      type: "data_store",
+      label: "NetSuite Currency Data Store",
+    },
     input_records: {
       type: "any",
       label: "Input Records",
@@ -48,10 +61,11 @@ export default {
   },
 
   async run({ steps, $ }) {
+    currencyDataStore = this.currency_data_store
     cacheAllKnownExchangeRates(this.input_records)
     for (const record of this.input_records) {
       if (!record.ExchangeRate) {
-        record.ExchangeRate = getExchangeRateFor(record)
+        record.ExchangeRate = await getExchangeRateFor(record)
       }
     }
     return this.input_records
