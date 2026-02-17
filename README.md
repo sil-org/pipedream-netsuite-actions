@@ -10,6 +10,7 @@ A collection of custom Pipedream actions for working with the NetSuite API.
 4. Query Records - Runs a SuiteQL query against NetSuite records
 5. Get Customers - Get all Netsuite customers from a list of externalids
 6. Exchange Rate Lookup - Calls NetSuite for what a specific currency's exchange rate was on a specific date
+7. Fill In Exchange Rates - Fill in the ExchangeRate on each of the given records, looking it up in NetSuite when necessary
 
 ## Tests
 
