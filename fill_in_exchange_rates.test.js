@@ -23,7 +23,7 @@ const sampleCurrencyData = {
   PGK: {
     ID: 25,
     Name: 'Papua New Guinean Kina',
-  }
+  },
 }
 
 describe(component.name, () => {
@@ -49,7 +49,7 @@ describe(component.name, () => {
     }
   })
 
-  it('should not re-request an exchange rate we already have, even if out of order', async () => {
+  it('should not re-request an exchange rate we already have, even one later in the list', async () => {
     component.methods.emptyCache()
     component.input_records = [
       { Currency: 'PGK', TransactionDate: '2023-04-24' },
@@ -72,10 +72,10 @@ describe(component.name, () => {
   })
 
   it('should fill in the exchange rate for records without one', async (testContext) => {
-    // if (!process.env.NETSUITE_CONFIG_DEV) {
-    //   testContext.skip('No NETSUITE_CONFIG_DEV env. var. found, so skipping integration test.')
-    //   return
-    // }
+    if (!process.env.NETSUITE_CONFIG_DEV) {
+      testContext.skip('No NETSUITE_CONFIG_DEV env. var. found, so skipping integration test.')
+      return
+    }
     component.netsuite_config_json = process.env.NETSUITE_CONFIG_DEV
     component.methods.emptyCache()
     component.currency_data_store = fakeCurrencyDataStore

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 
 let cache = {}
 let currencyDataStore = undefined
-let netsuiteConfigJson = '{}'
+let netsuiteConfigJson = undefined
 
 const cacheAllKnownExchangeRates = (records) => {
   for (const record of records) {
@@ -35,7 +35,7 @@ const getFromCache = (currency, transactionDate) => {
 const lookUpCurrencyId = async (currency) => {
   assert.ok(currency, 'No Currency provided to lookUpCurrencyId()')
   const currencyData = await currencyDataStore.get(currency)
-  assert.ok(currencyData.ID, 'No Currency ID found in Currency Data Store for ' + currency)
+  assert.ok(currencyData?.ID, 'No Currency ID found in Currency Data Store for ' + currency)
   return currencyData.ID
 }
 
@@ -81,8 +81,8 @@ const toDateOnlyISO8601 = (dateString) => {
 
 export default {
   name: "Fill In Exchange Rates",
-  description: "Retrieve a specific currency exchange rate from NetSuite",
-  key: "exchange_rate_lookup",
+  description: "Fill in the ExchangeRate on each of the given records, looking it up in NetSuite when necessary",
+  key: "fill_in_exchange_rates",
   version: "0.1.0",
   type: "action",
 
