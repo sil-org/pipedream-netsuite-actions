@@ -26,6 +26,28 @@ describe(component.name, () => {
     }
   })
 
+  it('should not re-request an exchange rate we already have, even if out of order', async () => {
+    component.methods.emptyCache()
+    component.input_records = [
+      { Currency: 'PGK', TransactionDate: '2025-11-05' },
+      { Currency: 'PGK', TransactionDate: '2025-11-05', ExchangeRate: 0.23352482368875811498 },
+    ]
+    const response = await component.run({
+      steps: { trigger: {} },
+      $: {
+        export: console.log
+      }
+    })
+
+    assert.equal(response.length, component.input_records.length)
+    for (const responseRecord of response) {
+      assert.ok(
+        responseRecord.ExchangeRate > 0,
+        'A record lacks a valid exchange rate: ' + JSON.stringify(responseRecord)
+      )
+    }
+  })
+
   it('should fill in the exchange rate for records without one', async () => {
     component.methods.emptyCache()
     component.input_records = [

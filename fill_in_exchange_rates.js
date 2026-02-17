@@ -1,5 +1,13 @@
 let cache = {}
 
+const cacheAllKnownExchangeRates = (records) => {
+  for (const record of records) {
+    if (record.ExchangeRate) {
+      setInCache(record.Currency, record.TransactionDate, record.ExchangeRate)
+    }
+  }
+}
+
 const getExchangeRateFor = (record) => {
   const cachedValue = getFromCache(record.Currency, record.TransactionDate)
   if (cachedValue) {
@@ -40,10 +48,9 @@ export default {
   },
 
   async run({ steps, $ }) {
+    cacheAllKnownExchangeRates(this.input_records)
     for (const record of this.input_records) {
-      if (record.ExchangeRate) {
-        setInCache(record.Currency, record.TransactionDate, record.ExchangeRate)
-      } else {
+      if (!record.ExchangeRate) {
         record.ExchangeRate = getExchangeRateFor(record)
       }
     }
