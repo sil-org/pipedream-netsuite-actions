@@ -61,6 +61,9 @@ const lookUpExchangeRateInNetsuite = async (transactionDate, foreignCurrencyId) 
 }
 
 const setInCache = (currency, transactionDate, exchangeRate) => {
+  assert.ok(currency, 'No Currency provided to setInCache()')
+  assert.ok(transactionDate, 'No Transaction Date provided to setInCache()')
+  assert.ok(exchangeRate, 'No Exchange Rate Date provided to setInCache()')
   const key = currency + '-' + transactionDate
   cache[key] = exchangeRate
 }
