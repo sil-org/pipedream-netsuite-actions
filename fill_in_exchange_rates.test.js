@@ -30,8 +30,8 @@ describe(component.name, () => {
   it('should not re-request an exchange rate we already have', async () => {
     component.methods.emptyCache()
     component.input_records = [
-      { Currency: 'PGK', TransactionDate: '2025-11-05', ExchangeRate: 0.23352482368875811498 },
-      { Currency: 'PGK', TransactionDate: '2025-11-05' },
+      { Currency: 'PGK', TransactionDate: '2023-04-24', ExchangeRate: 0.738618 },
+      { Currency: 'PGK', TransactionDate: '2023-04-24' },
     ]
     const response = await component.run({
       steps: { trigger: {} },
@@ -52,8 +52,8 @@ describe(component.name, () => {
   it('should not re-request an exchange rate we already have, even if out of order', async () => {
     component.methods.emptyCache()
     component.input_records = [
-      { Currency: 'PGK', TransactionDate: '2025-11-05' },
-      { Currency: 'PGK', TransactionDate: '2025-11-05', ExchangeRate: 0.23352482368875811498 },
+      { Currency: 'PGK', TransactionDate: '2023-04-24' },
+      { Currency: 'PGK', TransactionDate: '2023-04-24', ExchangeRate: 0.738618 },
     ]
     const response = await component.run({
       steps: { trigger: {} },
@@ -80,8 +80,8 @@ describe(component.name, () => {
     component.methods.emptyCache()
     component.currency_data_store = fakeCurrencyDataStore
     component.input_records = [
-      { Currency: 'PGK', TransactionDate: '2025-11-05' },
-      { Currency: 'USD', TransactionDate: '2025-11-05', ExchangeRate: 1.00000000000000000000 },
+      { Currency: 'PGK', TransactionDate: '2023-04-24' },
+      { Currency: 'USD', TransactionDate: '2023-04-24', ExchangeRate: 1.000000 },
     ]
     const response = await component.run({
       steps: { trigger: {} },
