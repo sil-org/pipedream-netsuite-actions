@@ -4,7 +4,7 @@ export default defineComponent({
   name: "Batch NetSuite Request",
   description: "Send a batch of requests to a single NetSuite REST API endpoint.",
   key: "batch_netsuite_request",
-  version: "0.0.1",
+  version: "0.0.2",
   type: "action",
 
   props: {
@@ -49,7 +49,7 @@ export default defineComponent({
   },
   methods: {
     async request(client, body) {
-      await Promise.any([
+      await Promise.race([
         client.request({
           method: this.httpRequest.method,
           path: this.httpRequest.url,
