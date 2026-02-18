@@ -2,8 +2,8 @@ import { netsuite } from '@sil-org/pipedream-utils@^0.2.0'
 import assert from "node:assert/strict";
 
 let cache = {}
-let currencyDataStore = undefined
-let netsuiteConfigJson = undefined
+let currencyDataStore
+let netsuiteConfigJson
 
 const cacheAllKnownExchangeRates = (records) => {
   for (const record of records) {
