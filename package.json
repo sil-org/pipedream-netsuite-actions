@@ -4,6 +4,7 @@
     "test": "node --import 'data:text/javascript,import { register } from \"node:module\"; import { pathToFileURL } from \"node:url\"; register(\"./loader.mjs\", pathToFileURL(\"./\"));' --test"
   },
   "dependencies": {
+    "@sil-org/pipedream-utils": "^0.2.0",
     "netsuite-api-client": "^1.0.3"
   }
 }
