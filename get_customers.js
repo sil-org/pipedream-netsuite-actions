@@ -1,4 +1,4 @@
-import { NetsuiteApiClient } from "netsuite-api-client";
+import { netsuite } from '@sil-org/pipedream-utils'
 
 export default {
   name: "Get Netsuite Customers",
@@ -28,28 +28,18 @@ export default {
   },
   async run({ steps, $ }) {
     try {
-      const client = new NetsuiteApiClient(JSON.parse(this.config));
-
-      const fields = this.fields || ["*"]
-      const q = `SELECT ${fields.join(",")} FROM customer WHERE externalid IN ('${this.externalids.join("','")}')`
-      console.log(q)
+      // dedupe the external ids
+      const ids = [...new Set(this.externalids)];
       
-      let limit = 1000
-      let offset = 0
-      let response = {}
-      let items = []
-      do {
-        response = await client.query(q, limit, offset)
-        items = items.concat(response.items)
-        offset += limit
-      } while (response.hasMore)
+      const fields = this.fields || ["*"]
+      const q = `SELECT ${fields.join(",")} FROM customer WHERE externalid IN ('${ids.join("','")}')`
+      console.log(q)
 
-      $.export("customers", items)
+      const customers = await netsuite.queryRecords(q, JSON.parse(this.config))
+      $.export("customers", customers)
 
-      if (items.length != this.externalids.length) {
-        const notFound = this.externalids.filter((id) => {
-          return !items.some((item) => item.externalid == id)
-        })
+      if (customers.length != ids.length) {
+        const notFound = ids.filter((id) => !customers.some((customer) => customer.externalid == id)})
         $.export("error", `The following externalids were not found: ${notFound.join(",")}`)
         $.export("notFoundExternalIds", notFound)
       }
