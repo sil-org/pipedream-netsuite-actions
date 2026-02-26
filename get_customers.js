@@ -4,7 +4,7 @@ export default {
   name: "Get Netsuite Customers",
   description: "This action gets all netsuite customers from a list of externalids.",
   key: "netsuite_get_customers",
-  version: "0.0.27",
+  version: "0.0.28",
   type: "action",
 
   props: {
