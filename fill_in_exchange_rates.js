@@ -83,7 +83,7 @@ export default {
   name: "Fill In Exchange Rates",
   description: "Fill in the ExchangeRate on each of the given records, looking it up in NetSuite when necessary",
   key: "fill_in_exchange_rates",
-  version: "0.1.0",
+  version: "0.1.1",
   type: "action",
 
   props: {
