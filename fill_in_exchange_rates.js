@@ -114,11 +114,22 @@ export default {
     netsuiteConfigJson = this.netsuite_config_json
     currencyDataStore = this.currency_data_store
     cacheAllKnownExchangeRates(this.input_records)
+    const successfulRecords = []
+    const failedRecords = []
     for (const record of this.input_records) {
-      if (!record.ExchangeRate) {
-        record.ExchangeRate = await getExchangeRateFor(record)
+      try {
+        if (!record.ExchangeRate) {
+          record.ExchangeRate = await getExchangeRateFor(record)
+        }
+        successfulRecords.push(record)
+      } catch (error) {
+        record.error = error.message || error
+        failedRecords.push(record)
       }
     }
-    return this.input_records
+    if (failedRecords.length > 0) {
+      $.export('errors', failedRecords)
+    }
+    return successfulRecords
   },
 }
