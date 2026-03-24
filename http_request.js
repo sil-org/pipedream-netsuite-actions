@@ -106,11 +106,11 @@ export default {
         "NetSuite API Error:",
         error.response?.data || error.message
       );
-      throw new Error(
-        `Failed to execute NetSuite request: ${
+      return {
+        error: `Failed to execute NetSuite request: ${
           error.response?.data?.detail || error.message
         }`
-      );
+      }
     }
   },
 };
