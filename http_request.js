@@ -4,7 +4,7 @@ export default {
   name: "NetSuite Request",
   description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
-  version: "0.0.11",
+  version: "0.1.0",
   type: "action",
 
   props: {
