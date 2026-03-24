@@ -50,6 +50,13 @@ export default {
       description: "Set Skip to TRUE or an expression that evaluates to true to skip this step.",
       default: false,
       optional: true,
+    },
+    throw_errors: {
+      type: "boolean",
+      label: "Throw errors (vs. returning `error` property)",
+      description: "If true, Errors thrown during NetSuite call will be thrown by this. If false, they will be returned in an `error` property in the return value object.",
+      default: true,
+      optional: true,
     }
   },
   methods: {
@@ -106,6 +113,13 @@ export default {
         "NetSuite API Error:",
         error.response?.data || error.message
       );
+      if (this.throw_errors) {
+        throw new Error(
+          `Failed to execute NetSuite request: ${
+            error.response?.data?.detail || error.message
+          }`
+        );
+      }
       return {
         error: `Failed to execute NetSuite request: ${
           error.response?.data?.detail || error.message
