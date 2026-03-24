@@ -26,8 +26,10 @@ describe(component.name, () => {
     component.headers = {}
     component.get_more = false
     component.skip = false
+
+    let response
     try {
-      const response = await component.run({
+      response = await component.run({
         steps: {trigger: {}},
         $: {
           export: console.log
