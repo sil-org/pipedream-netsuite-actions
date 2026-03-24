@@ -1,6 +1,6 @@
 import { NetsuiteApiClient } from "netsuite-api-client";
 
-export default defineComponent({
+export default {
   name: "NetSuite Request",
   description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
@@ -113,4 +113,4 @@ export default defineComponent({
       );
     }
   },
-});
+};
