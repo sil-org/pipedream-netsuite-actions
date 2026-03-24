@@ -113,17 +113,14 @@ export default {
         "NetSuite API Error:",
         error.response?.data || error.message
       );
+      const errorMessage = `Failed to execute NetSuite request: ${
+        error.response?.data?.detail || error.message
+      }`
       if (this.throw_errors) {
-        throw new Error(
-          `Failed to execute NetSuite request: ${
-            error.response?.data?.detail || error.message
-          }`
-        );
+        throw new Error(errorMessage);
       }
       return {
-        error: `Failed to execute NetSuite request: ${
-          error.response?.data?.detail || error.message
-        }`
+        error: errorMessage,
       }
     }
   },
