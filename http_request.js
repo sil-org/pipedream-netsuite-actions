@@ -1,10 +1,10 @@
 import { NetsuiteApiClient } from "netsuite-api-client";
 
-export default defineComponent({
+export default {
   name: "NetSuite Request",
   description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
-  version: "0.0.11",
+  version: "0.0.12",
   type: "action",
 
   props: {
@@ -49,6 +49,13 @@ export default defineComponent({
       label: "Skip",
       description: "Set Skip to TRUE or an expression that evaluates to true to skip this step.",
       default: false,
+      optional: true,
+    },
+    throw_errors: {
+      type: "boolean",
+      label: "Throw errors (vs. returning `error` property)",
+      description: "If true, Errors thrown during NetSuite call will be thrown by this. If false, they will be returned in an `error` property in the return value object.",
+      default: true,
       optional: true,
     }
   },
@@ -106,11 +113,15 @@ export default defineComponent({
         "NetSuite API Error:",
         error.response?.data || error.message
       );
-      throw new Error(
-        `Failed to execute NetSuite request: ${
-          error.response?.data?.detail || error.message
-        }`
-      );
+      const errorMessage = `Failed to execute NetSuite request: ${
+        error.response?.data?.detail || error.message
+      }`
+      if (this.throw_errors) {
+        throw new Error(errorMessage);
+      }
+      return {
+        error: errorMessage,
+      }
     }
   },
-});
+};
