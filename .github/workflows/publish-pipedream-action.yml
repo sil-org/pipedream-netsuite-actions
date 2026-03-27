@@ -66,6 +66,10 @@ jobs:
       - name: Publish Actions to Pipedream
         run: |
           changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | grep '\.js$' | grep -v '\.test\.js$' || echo no files to publish)
-          for file in $changed_files; do
-            pd publish $file
-          done
+          if [ -z "$changed_files" ]; then
+            echo "No changed action files to publish." | tee -a $GITHUB_STEP_SUMMARY
+          else
+            for file in $changed_files; do
+              pd publish $file
+            done
+          fi
