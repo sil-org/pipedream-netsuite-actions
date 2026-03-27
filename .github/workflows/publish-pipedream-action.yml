@@ -71,5 +71,6 @@ jobs:
           else
             for file in $changed_files; do
               pd publish $file
-            done
+            done            
+            echo "Published: $changed_files" >> $GITHUB_STEP_SUMMARY
           fi
