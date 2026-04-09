@@ -76,8 +76,10 @@ export default defineComponent({
       }
 
       $.export("$summary", `${this.request.method} ${this.request.url} succeeded.`);
+      $.export("success", true);
       return response.data;
     } catch (error) {
+      $.export("$summary", `${this.request.method} ${this.request.url} failed.`);
       $.export("error", error.response?.data || error.message);
     }
   },
