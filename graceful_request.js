@@ -4,7 +4,7 @@ export default defineComponent({
   name: "Graceful NetSuite Request",
   description: "Send a request to the NetSuite REST API, exporting to `error` on failure instead of throwing an Error.",
   key: "graceful_netsuite_request",
-  version: "0.0.1",
+  version: "0.0.2",
   type: "action",
 
   props: {
@@ -48,11 +48,11 @@ export default defineComponent({
     }
 
     const client = new NetsuiteApiClient(JSON.parse(this.config));
-
+    
     const options = {
       method: this.request.method,
       path: this.request.url,
-      body: this.request.body ? JSON.stringify(this.request.body) : undefined,
+      body: this.request.body?.raw ? JSON.stringify(this.request.body.raw) : undefined,
       headers: this.request.headers,
     };
 
