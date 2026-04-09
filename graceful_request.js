@@ -48,11 +48,11 @@ export default defineComponent({
     }
 
     const client = new NetsuiteApiClient(JSON.parse(this.config));
-
+    
     const options = {
       method: this.request.method,
       path: this.request.url,
-      body: this.request.body ? JSON.stringify(this.request.body) : undefined,
+      body: this.request.body?.raw ? JSON.stringify(this.request.body.raw) : undefined,
       headers: this.request.headers,
     };
 
