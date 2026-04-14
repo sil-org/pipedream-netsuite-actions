@@ -29,6 +29,7 @@ const sampleCurrencyData = {
 describe(component.name, () => {
   it('should not re-request an exchange rate we already have', async () => {
     component.methods.emptyCache()
+    component.currency_data_store = fakeCurrencyDataStore
     component.input_records = [
       { Currency: 'PGK', TransactionDate: '2023-04-24', ExchangeRate: 0.738618 },
       { Currency: 'PGK', TransactionDate: '2023-04-24' },
@@ -51,6 +52,7 @@ describe(component.name, () => {
 
   it('should not re-request an exchange rate we already have, even one later in the list', async () => {
     component.methods.emptyCache()
+    component.currency_data_store = fakeCurrencyDataStore
     component.input_records = [
       { Currency: 'PGK', TransactionDate: '2023-04-24' },
       { Currency: 'PGK', TransactionDate: '2023-04-24', ExchangeRate: 0.738618 },
