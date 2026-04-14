@@ -189,7 +189,6 @@ export default {
           this.input_records[index].ExchangeRate = rate
         }
       } catch (err) {
-        record.error = err.message || err
         failed.push({
           ...record,
           error: err.message || err
