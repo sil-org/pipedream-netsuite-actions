@@ -161,7 +161,9 @@ export default {
     }
 
     // Batch fetch
-    await fetchExchangeRates(requests)
+    if (requests.length > 0) {
+      await fetchExchangeRates(requests)
+    }
 
     // Fill records
     for (const record of this.input_records) {
