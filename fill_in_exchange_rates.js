@@ -116,6 +116,13 @@ export default {
     },
   },
 
+  methods: {
+    emptyCache() {
+      exchangeRateCache = {}
+      currencyIdCache = {}
+    },
+  },
+
   async run({ $, steps }) {
     netsuiteConfigJson = this.netsuite_config_json
     currencyDataStore = this.currency_data_store
