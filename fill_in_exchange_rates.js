@@ -66,12 +66,17 @@ const fetchExchangeRates = async (requests) => {
     const maxDate = dates.sort().reverse()[0]
 
     const query = `
-      SELECT exchangerate, effectivedate
-      FROM currencyrate
-      WHERE basecurrency = 1
-      AND transactioncurrency = ${currencyId}
-      AND effectivedate <= TO_DATE('${maxDate}', 'YYYY-MM-DD')
-      ORDER BY effectivedate DESC
+      SELECT
+        exchangerate,
+        effectivedate
+      FROM
+        currencyrate
+      WHERE
+        basecurrency = 1
+        AND effectivedate <= TO_DATE('${maxDate}', 'YYYY-MM-DD')
+        AND transactioncurrency = ${currencyId}
+      ORDER BY
+        effectivedate DESC
     `
 
     const results = await netsuite.queryRecords(query, netsuiteConfig)
