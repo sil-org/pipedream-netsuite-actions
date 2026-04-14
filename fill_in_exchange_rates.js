@@ -8,6 +8,15 @@ let currencyIdCache = {}
 let currencyDataStore
 let netsuiteConfigJson
 
+const cacheAllKnownExchangeRates = (records) => {
+  for (const record of records) {
+    if (record.ExchangeRate) {
+      const key = getCacheKey(record.Currency, record.TransactionDate)
+      exchangeRateCache[key] = record.ExchangeRate
+    }
+  }
+}
+
 // Helpers
 const getCacheKey = (currency, date) => `${currency}-${date}`
 
@@ -127,6 +136,8 @@ export default {
     netsuiteConfigJson = this.netsuite_config_json
     currencyDataStore = this.currency_data_store
 
+    cacheAllKnownExchangeRates(this.input_records)
+
     const successful = []
     const failed = []
 
@@ -136,9 +147,6 @@ export default {
     for (const record of this.input_records) {
       try {
         if (record.ExchangeRate) {
-          // Already has value -> cache it
-          const key = getCacheKey(record.Currency, record.TransactionDate)
-          exchangeRateCache[key] = record.ExchangeRate
           continue
         }
 
