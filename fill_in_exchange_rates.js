@@ -93,6 +93,8 @@ const reqCurrencyFromId = (id) => {
 
 export default {
   name: "Fill In Exchange Rates (Optimized)",
+  description: "Fill in the ExchangeRate on each of the given records, looking it up in NetSuite when necessary",
+  key: "fill_in_exchange_rates",
   version: "0.2.0",
   type: "action",
 
@@ -100,15 +102,17 @@ export default {
     netsuite_config_json: {
       type: "string",
       label: "NetSuite Config JSON",
+      description: "JSON-encoded configuration object needed for calls to NetSuite",
       secret: true,
     },
     currency_data_store: {
       type: "data_store",
-      label: "Currency Data Store",
+      label: "NetSuite Currency Data Store",
     },
     input_records: {
       type: "any",
       label: "Input Records",
+      description: "The list of records, some of which might lack an ExchangeRate",
     },
   },
 
