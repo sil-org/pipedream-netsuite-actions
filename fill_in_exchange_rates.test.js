@@ -101,7 +101,7 @@ describe(component.name, () => {
     }
   })
 
-  it('should return successful records and errors separately', async (testContext) => {
+  it('should return ALL records, plus a separate list of records with errors', async (testContext) => {
     if (!process.env.NETSUITE_CONFIG_DEV) {
       testContext.skip('No NETSUITE_CONFIG_DEV env. var. found, so skipping integration test.')
       return
@@ -125,16 +125,11 @@ describe(component.name, () => {
       }
     })
 
-    assert.ok(
-      response.length < component.input_records.length,
-      'Expected to only receive successful records back in returned data.'
+    assert.equal(
+      response.length,
+      component.input_records.length,
+      'Expected to receive ALL records back in returned data.'
     )
     assert.equal(namedExports.errors.length, 1, 'Expected 1 error record')
-    for (const responseRecord of response) {
-      assert.ok(
-        responseRecord.ExchangeRate > 0,
-        'A successful record lacks a valid exchange rate: ' + JSON.stringify(responseRecord)
-      )
-    }
   })
 })
