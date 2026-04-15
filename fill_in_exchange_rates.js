@@ -109,7 +109,7 @@ export default {
   name: "Fill In Exchange Rates (Optimized)",
   description: "Fill in the ExchangeRate on each of the given records, looking it up in NetSuite when necessary",
   key: "fill_in_exchange_rates",
-  version: "0.2.1",
+  version: "0.3.0",
   type: "action",
 
   props: {
@@ -143,12 +143,10 @@ export default {
 
     cacheAllKnownExchangeRates(this.input_records)
 
-    const successful = []
     const failed = []
 
     // Build request list
     const requests = []
-
     for (const record of this.input_records) {
       try {
         if (record.ExchangeRate) {
@@ -172,14 +170,14 @@ export default {
         failed.push(record)
       }
     }
-
-    // Batch fetch
     if (requests.length > 0) {
+      // Batch fetch
       await fetchExchangeRates(requests)
     }
 
     // Fill records
-    for (const record of this.input_records) {
+    for (const index in this.input_records) {
+      const record = this.input_records[index]
       try {
         if (!record.ExchangeRate) {
           const date = toDateOnlyISO8601(record.TransactionDate)
@@ -188,14 +186,13 @@ export default {
           const rate = exchangeRateCache[key]
 
           assert.ok(rate, `No exchange rate for ${key}`)
-
-          record.ExchangeRate = rate
+          this.input_records[index].ExchangeRate = rate
         }
-
-        successful.push(record)
       } catch (err) {
-        record.error = err.message || err
-        failed.push(record)
+        failed.push({
+          ...record,
+          error: err.message || err
+        })
       }
     }
 
@@ -203,6 +200,6 @@ export default {
       $.export('errors', failed)
     }
 
-    return successful
+    return this.input_records
   },
 }
