@@ -29,12 +29,12 @@ export default {
   async run({ steps, $ }) {
     try {
       // Dedupe external ids
-      const eids = [...new Set(this.externalids)]
+      const uniqueExternalIDs = [...new Set(this.externalids)]
 
       const client = new NetsuiteApiClient(JSON.parse(this.config));
 
       const fields = this.fields || ["*"]
-      const q = `SELECT ${fields.join(",")} FROM customer WHERE externalid IN ('${eids.join("','")}')`
+      const q = `SELECT ${fields.join(",")} FROM customer WHERE externalid IN ('${uniqueExternalIDs.join("','")}')`
       console.log(q)
       
       let limit = 1000
@@ -49,8 +49,8 @@ export default {
 
       $.export("customers", items)
 
-      if (items.length != eids.length) {
-        const notFound = eids.filter((id) => !items.some((item) => item.externalid == id))
+      if (items.length != uniqueExternalIDs.length) {
+        const notFound = uniqueExternalIDs.filter((id) => !items.some((item) => item.externalid == id))
         $.export("error", `The following externalids were not found: ${notFound.join(",")}`)
         $.export("notFoundExternalIds", notFound)
       }
