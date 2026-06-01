@@ -32,7 +32,7 @@ describe('Exchange Rate Lookup', () => {
       testContext.skip('No NETSUITE_CONFIG_DEV env. var. found, so skipping integration test.')
       return
     }
-    component.netsuite_config_json = process.env.NETSUITE_CONFIG_DEV
+    component.netsuite_config_json = JSON.stringify(process.env.NETSUITE_CONFIG_DEV)
     component.transaction_date = '2023-04-24'
     component.foreign_currency_id = 25
     component.file_name = 'EXAMPLE.csv'
