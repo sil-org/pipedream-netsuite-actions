@@ -4,7 +4,7 @@ export default {
   name: "NetSuite Request",
   description: "Send a request to the NetSuite REST API.",
   key: "netsuite_request",
-  version: "0.0.12",
+  version: "0.1.0",
   type: "action",
 
   props: {
@@ -78,7 +78,9 @@ export default {
       return {}
     }
 
-    const client = new NetsuiteApiClient(JSON.parse(this.config));
+    const config = JSON.parse(this.config)
+    console.log("Realm:", config.realm)
+    const client = new NetsuiteApiClient(config);
 
     const options = {
       method: this.method,

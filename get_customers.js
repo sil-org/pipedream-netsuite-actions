@@ -4,7 +4,7 @@ export default {
   name: "Get Netsuite Customers",
   description: "This action gets all netsuite customers from a list of externalids.",
   key: "netsuite_get_customers",
-  version: "0.0.28",
+  version: "0.1.0",
   type: "action",
 
   props: {
@@ -31,7 +31,9 @@ export default {
       // Dedupe external ids
       const uniqueExternalIDs = [...new Set(this.externalids)]
 
-      const client = new NetsuiteApiClient(JSON.parse(this.config));
+      const config = JSON.parse(this.config)
+      console.log("Realm:", config.realm)
+      const client = new NetsuiteApiClient(config);
 
       const fields = this.fields || ["*"]
       const q = `SELECT ${fields.join(",")} FROM customer WHERE externalid IN ('${uniqueExternalIDs.join("','")}')`

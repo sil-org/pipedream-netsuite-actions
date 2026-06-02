@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.0.20",
+  version: "0.1.0",
   type: "action",
 
   props: {
@@ -53,7 +53,10 @@ export default defineComponent({
     }
   },
   async run({ $ }) {
-    const client = new NetsuiteApiClient(JSON.parse(this.config));
+    const config = JSON.parse(this.config)
+    console.log("Realm:", config.realm)
+    const client = new NetsuiteApiClient(config);
+
     const limit = Math.min(1000, this.timeout_records)
     let offset = 0
     const start = Date.now()

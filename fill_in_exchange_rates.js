@@ -43,6 +43,7 @@ const getCurrencyId = async (currency) => {
 // Batch fetch exchange rates
 const fetchExchangeRates = async (requests) => {
   const netsuiteConfig = JSON.parse(netsuiteConfigJson)
+  console.log("Realm:", netsuiteConfig.realm)
 
   // Group by currency ID to reduce queries
   const grouped = {}
@@ -109,7 +110,7 @@ export default {
   name: "Fill In Exchange Rates (Optimized)",
   description: "Fill in the ExchangeRate on each of the given records, looking it up in NetSuite when necessary",
   key: "fill_in_exchange_rates",
-  version: "0.3.0",
+  version: "0.4.0",
   type: "action",
 
   props: {

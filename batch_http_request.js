@@ -4,7 +4,7 @@ export default defineComponent({
   name: "Batch NetSuite Request",
   description: "Send a batch of requests to a single NetSuite REST API endpoint.",
   key: "batch_netsuite_request",
-  version: "0.0.3",
+  version: "0.1.0",
   type: "action",
 
   props: {
@@ -69,7 +69,9 @@ export default defineComponent({
     }
   },
   async run({ $ }) {
-    const client = new NetsuiteApiClient(JSON.parse(this.config));
+    const config = JSON.parse(this.config)
+    console.log("Realm:", config.realm)
+    const client = new NetsuiteApiClient(config);
 
     try {
       const queue = [];
