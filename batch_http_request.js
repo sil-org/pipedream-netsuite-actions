@@ -4,8 +4,10 @@ export default defineComponent({
   name: "Batch NetSuite Request",
   description: "Send a batch of requests to a single NetSuite REST API endpoint.",
   key: "batch_netsuite_request",
-  version: "0.1.0",
   type: "action",
+
+  // Unless urgently needed, this action should only be modified in Github
+  version: "0.1.1",
 
   props: {
     config: {
