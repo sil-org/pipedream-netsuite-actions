@@ -68,9 +68,7 @@ const queryRecords = {
   },
 
   async run({ $ }) {
-    const config = JSON.parse(this.config)
-    console.log("Realm:", config.realm)
-    const client = new NetsuiteApiClient(config);
+    const client = new NetsuiteApiClient(JSON.parse(this.config));
 
     const limit = Math.min(1000, this.timeout_records)
     let offset = 0
@@ -112,8 +110,10 @@ export default {
   name: "Exchange Rate Lookup (NetSuite)",
   description: "Retrieve a specific currency exchange rate from NetSuite",
   key: "exchange_rate_lookup",
-  version: "0.2.0",
   type: "action",
+
+  // Unless urgently needed, this action should only be modified in Github
+  version: "0.2.1",
 
   props: {
     netsuite_config_json: {
@@ -151,6 +151,8 @@ export default {
   async run({ steps, $ }) {
     const transactionDateForQuery = methods.toDateOnlyISO8601(this.transaction_date)
     queryRecords.config = JSON.parse(this.netsuite_config_json)
+    console.log("Realm:", queryRecords.config.realm)
+
     queryRecords.timeout_records = 1000
     queryRecords.query = `
         SELECT
