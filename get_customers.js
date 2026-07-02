@@ -4,7 +4,7 @@ export default {
   name: "Get Netsuite Customers",
   description: "This action gets all netsuite customers from a list of externalids.",
   key: "netsuite_get_customers",
-  version: "0.1.0",
+  version: "0.2.0",
   type: "action",
 
   props: {
@@ -28,15 +28,18 @@ export default {
   },
   async run({ steps, $ }) {
     try {
-      // Dedupe external ids
-      const uniqueExternalIDs = [...new Set(this.externalids)]
+      // Dedupe external ids (case insensitive)
+      const uniqueExternalIDs = [...this.externalids.reduce((ids, id) => {
+        ids.add(id.toLowerCase());
+        return ids;
+      }, new Set())]
 
       const config = JSON.parse(this.config)
       console.log("Realm:", config.realm)
       const client = new NetsuiteApiClient(config);
 
       const fields = this.fields || ["*"]
-      const q = `SELECT ${fields.join(",")} FROM customer WHERE externalid IN ('${uniqueExternalIDs.join("','")}')`
+      const q = `SELECT ${fields.join(",")} FROM customer WHERE LOWER(externalid) IN ('${uniqueExternalIDs.join("','")}')`
       console.log(q)
       
       let limit = 1000
@@ -52,7 +55,7 @@ export default {
       $.export("customers", items)
 
       if (items.length != uniqueExternalIDs.length) {
-        const notFound = uniqueExternalIDs.filter((id) => !items.some((item) => item.externalid == id))
+        const notFound = uniqueExternalIDs.filter((id) => !items.some((item) => item.externalid.toLowerCase() == id))
         $.export("error", `The following externalids were not found: ${notFound.join(",")}`)
         $.export("notFoundExternalIds", notFound)
       }
