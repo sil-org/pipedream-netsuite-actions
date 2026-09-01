@@ -4,7 +4,7 @@ export default defineComponent({
   name: "NetSuite Query Records",
   description: "Run a SuiteQL query against NetSuite records.",
   key: "netsuite_query_records",
-  version: "0.1.0",
+  version: "0.1.1",
   type: "action",
 
   props: {
@@ -64,9 +64,11 @@ export default defineComponent({
 
     try {
       let items = []
+      let hasMore = true
       do {
         response = await client.query(this.query, limit, offset)
         items = items.concat(response.items)
+        hasMore = response.hasMore
         offset += limit
 
         if (await this.handle_timeout(start, items.length)) {
@@ -74,6 +76,10 @@ export default defineComponent({
         }
       } while (response.hasMore)
 
+      $.export(
+        "hasMore",
+        hasMore
+      )
       $.export(
         "$summary",
         `Successfully ran SuiteQL query`
